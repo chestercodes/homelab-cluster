@@ -1,0 +1,57 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: "{{ .Release.Name }}"
+  namespace: "{{ .Release.Namespace }}"
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+    - host: grafana.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Release.Name }}-grafana"
+                port:
+                  number: 80
+    - host: grafana.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: "{{ .Release.Name }}-grafana"
+                port:
+                  number: 80
+    - host: prometheus.home.arpa
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                # might need to change this if the application name changes
+                # looks like it's the release name plus enough chars
+                # of -kube-prometheus-stack to make 26 chars
+                # in this case the value needed is '-kube-promethe'
+                name: "{{ .Release.Name }}-kube-promethe-prometheus"
+                port:
+                  number: 9090
+    - host: prometheus.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                # might need to change this if the application name changes
+                # looks like it's the release name plus enough chars
+                # of -kube-prometheus-stack to make 26 chars
+                # in this case the value needed is '-kube-promethe'
+                name: "{{ .Release.Name }}-kube-promethe-prometheus"
+                port:
+                  number: 9090

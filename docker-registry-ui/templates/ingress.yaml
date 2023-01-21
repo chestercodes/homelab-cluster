@@ -1,0 +1,22 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`registryui.home.arpa`)
+      priority: 10
+      services:
+        - name: "{{ .Release.Name }}-docker-registry-ui-user-interface"
+          port: 80
+    - kind: Rule
+      match: Host(`registryui.local`)
+      priority: 10
+      services:
+        - name: "{{ .Release.Name }}-docker-registry-ui-user-interface"
+          port: 80
+

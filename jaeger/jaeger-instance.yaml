@@ -1,0 +1,21 @@
+# in-memory storage, dont really care about persistence
+apiVersion: jaegertracing.io/v1
+kind: Jaeger
+metadata:
+  name: simplest
+  namespace: monitoring
+# use for more prod like scenarios
+
+# apiVersion: jaegertracing.io/v1
+# kind: Jaeger
+# metadata:
+#   name: simple-prod
+# spec:
+#   strategy: production
+#   collector:
+#     maxReplicas: 5
+#     resources:
+#       limits:
+#         cpu: 100m
+#         memory: 128Mi
+

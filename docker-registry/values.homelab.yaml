@@ -1,0 +1,6 @@
+capacity: 50Gi
+path: /slowmirror/homelab/agents/bigstorage/registry
+
+docker-registry:
+  persistence:
+    size: 50Gi

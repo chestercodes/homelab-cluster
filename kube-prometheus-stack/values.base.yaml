@@ -1,0 +1,38 @@
+kube-prometheus-stack:
+  prometheus:
+    prometheusSpec:
+      serviceMonitorSelectorNilUsesHelmValues: false
+
+  grafana:
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        uid: loki
+        access: proxy
+        url: http://cluster-loki:3100
+        # jsonData:
+        #   maxLines: 1000
+    # dashboardProviders:
+    #   dashboardproviders.yaml:
+    #     apiVersion: 1
+    #     providers:
+    #       - name: Production
+    #         orgId: 1
+    #         type: file
+    #         folder: Production
+    #         allowUiUpdates: true
+    #         disableDeletion: false
+    #         updateIntervalSeconds: 10
+    #         editable: true
+    #         options:
+    #           path: /tmp/dashboards/production
+    #       - name: Staging
+    #         orgId: 1
+    #         type: file
+    #         folder: Staging
+    #         allowUiUpdates: true
+    #         disableDeletion: false
+    #         updateIntervalSeconds: 10
+    #         editable: true
+    #         options:
+    #           path: /tmp/dashboards/staging

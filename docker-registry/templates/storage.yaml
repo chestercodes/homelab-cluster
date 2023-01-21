@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: registry-pv
+  namespace: pipeline
+  labels:
+    vol: registry
+spec:
+  capacity:
+    storage: "{{ .Values.capacity }}"
+  volumeMode: Filesystem
+  accessModes:
+  - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: "{{ .Values.path }}"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: nodename
+          operator: In
+          values:
+          - bigstorage
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: registry-pvc
+  namespace: pipeline
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: "{{ .Values.capacity }}"
+  storageClassName: local-storage
+  selector:
+    matchLabels:
+      vol: "registry"

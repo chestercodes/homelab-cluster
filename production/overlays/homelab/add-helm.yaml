@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: registry
+  namespace: argocd
+spec:
+  source:
+    helm:
+      valueFiles:
+      - values.all.yaml
+      - values.base.yaml
+      - values.homelab.yaml
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  source:
+    helm:
+      valueFiles:
+      - values.all.yaml
+      - values.base.yaml
+      - values.homelab.yaml
+---

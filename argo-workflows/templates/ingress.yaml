@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argo-workflows-server
+  namespace: {{ .Release.Namespace }}
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`argowf.local`)
+      priority: 10
+      services:
+        - name: "{{ .Release.Name }}-server"
+          port: 2746
+    - kind: Rule
+      match: Host(`argowf.home.arpa`)
+      priority: 10
+      services:
+        - name: "{{ .Release.Name }}-server"
+          port: 2746

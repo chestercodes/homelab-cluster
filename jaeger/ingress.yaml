@@ -1,0 +1,21 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: jaeger
+  namespace: monitoring
+spec:
+  entryPoints:
+    - web
+  routes:
+    - kind: Rule
+      match: Host(`jaeger.local`)
+      priority: 10
+      services:
+        - name: "simplest-query"
+          port: 16686
+    - kind: Rule
+      match: Host(`jaeger.home.arpa`)
+      priority: 10
+      services:
+        - name: "simplest-query"
+          port: 16686

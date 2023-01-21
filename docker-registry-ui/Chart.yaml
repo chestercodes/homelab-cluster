@@ -1,0 +1,7 @@
+apiVersion: v2
+name: docker-registry-ui
+version: 1.0.0
+dependencies:
+  - name: docker-registry-ui
+    version: 0.4.1
+    repository: https://helm.joxit.dev

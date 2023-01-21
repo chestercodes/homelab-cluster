@@ -1,0 +1,37 @@
+# have a cert in each namespace because cross-namespace requesting is hassel
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-cert-staging
+  namespace: pipeline
+spec:
+  # Secret names are always required.
+  secretName: wildcard-secret-staging
+  # At least one of a DNS Name, URI, or IP address is required.
+  dnsNames:
+  - "*.{{ .Values.externalDomain }}"
+  # - {{ .Values.externalDomain }}
+  issuerRef:
+    kind: ClusterIssuer
+    name: letsencrypt-issuer-staging
+---
+# dont want to hit lets encrypt rate limits
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-cert-production
+  namespace: pipeline
+spec:
+  # Secret names are always required.
+  secretName: wildcard-secret-production
+  # At least one of a DNS Name, URI, or IP address is required.
+  dnsNames:
+  - "*.{{ .Values.externalDomain }}"
+  # - {{ .Values.externalDomain }}
+  issuerRef:
+    kind: ClusterIssuer
+{{- if .Values.isProduction }}
+    name: letsencrypt-issuer-production
+{{- else }}
+    name: letsencrypt-issuer-staging
+{{- end }}

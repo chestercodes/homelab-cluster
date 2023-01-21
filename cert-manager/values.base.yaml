@@ -1,0 +1,7 @@
+
+externalDomain: mypersonaltld.com
+acmeEmail: my-account@personal-email.com
+cloudflareEmail: my-account@cloudflare.com
+
+cert-manager:
+  installCRDs: true

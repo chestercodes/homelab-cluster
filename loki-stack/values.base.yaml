@@ -1,0 +1,56 @@
+loki-stack:
+  loki:
+    enabled: true
+    isDefault: true
+    url: http://{{(include "loki.serviceName" .)}}:{{ .Values.loki.service.port }}
+    readinessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+      initialDelaySeconds: 45
+    livenessProbe:
+      httpGet:
+        path: /ready
+        port: http-metrics
+      initialDelaySeconds: 45
+    datasource:
+      jsonData: {}
+      uid: ""
+
+    # Should authentication be enabled
+    auth_enabled: false
+    # -- Storage config. Providing this will automatically populate all necessary storage configs in the templated config.
+    storage:
+      bucketNames:
+        chunks: chunks
+        ruler: ruler
+        admin: admin
+      type: filesystem
+      filesystem:
+        chunks_directory: /var/loki/chunks
+        rules_directory: /var/loki/rules
+
+  promtail:
+    enabled: true
+    config:
+      logLevel: info
+      serverPort: 3101
+      clients:
+        - url: http://{{ .Release.Name }}:3100/loki/api/v1/push
+      # file: |
+      #   server:
+      #     log_level: {{ .Values.config.logLevel }}
+      #     http_listen_port: {{ .Values.config.serverPort }}
+      #     {{- with .Values.httpPathPrefix }}
+      #     http_path_prefix: {{ . }}
+      #     {{- end }}
+      #     {{- tpl .Values.config.snippets.extraServerConfigs . | nindent 2 }}
+      #   clients:
+      #     {{- tpl (toYaml .Values.config.clients) . | nindent 2 }}
+      #   positions:
+      #     filename: /run/promtail/positions.yaml
+      #   scrape_configs:
+      #     {{- tpl .Values.config.snippets.scrapeConfigs . | nindent 2 }}
+      #     {{- tpl .Values.config.snippets.extraScrapeConfigs . | nindent 2 }}
+      #   limits_config:
+      #     {{- tpl .Values.config.snippets.extraLimitsConfig . | nindent 2 }}
